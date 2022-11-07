@@ -27,12 +27,13 @@ XMMATRIX Object3d::matBillboard = XMMatrixIdentity();
 XMMATRIX Object3d::matBillboardY = XMMatrixIdentity();
 XMMATRIX Object3d::matView{};
 XMMATRIX Object3d::matProjection{};
-XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
+//XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
+XMFLOAT3 Object3d::eye = { 0, 0, -5.0f };
 XMFLOAT3 Object3d::target = { 0, 0, 0 };
 XMFLOAT3 Object3d::up = { 0, 1, 0 };
 D3D12_VERTEX_BUFFER_VIEW Object3d::vbView{};
 //D3D12_INDEX_BUFFER_VIEW Object3d::ibView{};
-Object3d::VertexPosNormalUv Object3d::vertices[vertexCount];
+Object3d::VertexPos Object3d::vertices[vertexCount];
 //unsigned short Object3d::indices[indexCount];
 
 void Object3d::StaticInitialize(ID3D12Device * device, int window_width, int window_height)
@@ -559,9 +560,10 @@ void Object3d::CreateModel()
 	//	{{+5.0f,-5.0f,0.0f},{0,0,1},{1,1}},
 	//	{{+5.0f,+5.0f,0.0f},{0,0,1},{1,0}},
 	//};
-	VertexPosNormalUv verticesPoint[] =
+	VertexPos verticesPoint[] =
 	{
-		{{0.0f,0.0f,0.0f},{0,0,1},{0,1}},
+		//{{0.0f,0.0f,0.0f},{0,0,1},{0,1}},
+		{{0.0f,0.0f,0.0f}},
 	};
 	// メンバ変数にコピー
 	//std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
@@ -591,7 +593,8 @@ void Object3d::CreateModel()
 	assert(SUCCEEDED(result));
 
 	// 頂点バッファへのデータ転送
-	VertexPosNormalUv* vertMap = nullptr;
+	//VertexPosNormalUv* vertMap = nullptr;
+	VertexPos* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	if (SUCCEEDED(result)) {
 		memcpy(vertMap, vertices, sizeof(vertices));
@@ -771,8 +774,9 @@ void Object3d::Update()
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	constMap->color = color;
-	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	//constMap->color = color;
+	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	constMap->mat = matView * matProjection;	// 行列の合成
 	constBuff->Unmap(0, nullptr);
 }
 
