@@ -13,7 +13,7 @@ GameScene::~GameScene()
 	delete spriteBG;
 	for (size_t i = 0; i < 50; i++)
 	{
-		delete object3ds[i];
+		delete particleMan[i];
 	}
 }
 
@@ -44,10 +44,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	// 3Dオブジェクト生成
 	for (size_t i = 0; i < 50; i++)
 	{
-		object3ds[i] = Object3d::Create();
-		object3ds[i]->Initialize();
-		object3ds[i]->SetPosition({dist(engine), 0.0f, dist(engine)});
-		object3ds[i]->Update();
+		particleMan[i] = ParticleManager::Create();
+		particleMan[i]->Initialize();
+		particleMan[i]->SetPosition({dist(engine), 0.0f, dist(engine)});
+		particleMan[i]->Update();
 	}
 }
 
@@ -72,15 +72,15 @@ void GameScene::Update()
 	// カメラ移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
 	{
-		if (input->PushKey(DIK_W)) { Object3d::CameraMoveEyeVector({ 0.0f,+1.0f,0.0f }); }
-		else if (input->PushKey(DIK_S)) { Object3d::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
-		if (input->PushKey(DIK_D)) { Object3d::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
-		else if (input->PushKey(DIK_A)) { Object3d::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
+		if (input->PushKey(DIK_W)) { ParticleManager::CameraMoveEyeVector({ 0.0f,+1.0f,0.0f }); }
+		else if (input->PushKey(DIK_S)) { ParticleManager::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
+		if (input->PushKey(DIK_D)) { ParticleManager::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
+		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
 	}
 
 	for (size_t i = 0; i < 50; i++)
 	{
-		object3ds[i]->Update();
+		particleMan[i]->Update();
 	}
 }
 
@@ -107,12 +107,12 @@ void GameScene::Draw()
 
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
-	Object3d::PreDraw(cmdList);
+	ParticleManager::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
 	for (size_t i = 0; i < 50; i++)
 	{
-		object3ds[i]->Draw();
+		particleMan[i]->Draw();
 	}
 
 
@@ -121,7 +121,7 @@ void GameScene::Draw()
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理
-	Object3d::PostDraw();
+	ParticleManager::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画
