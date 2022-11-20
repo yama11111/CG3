@@ -32,7 +32,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	debugText.Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	Sprite::LoadTexture(1, L"Resources/background.png");
+	Sprite::LoadTexture(1, L"Resources/background2.png");
 
 	std::random_device seed_gen;
 	std::mt19937_64 engine(seed_gen());
@@ -93,7 +93,7 @@ void GameScene::Draw()
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
 	// 背景スプライト描画
-	//spriteBG->Draw();
+	spriteBG->Draw();
 
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
