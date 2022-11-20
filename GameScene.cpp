@@ -37,7 +37,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	std::random_device seed_gen;
 	std::mt19937_64 engine(seed_gen());
 
-	std::uniform_real_distribution<float> dist(-20, 20);
+	std::uniform_real_distribution<float> dist(-2, 2);
 
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
@@ -93,7 +93,7 @@ void GameScene::Draw()
 	// 背景スプライト描画前処理
 	Sprite::PreDraw(cmdList);
 	// 背景スプライト描画
-	spriteBG->Draw();
+	//spriteBG->Draw();
 
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
