@@ -11,10 +11,8 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete spriteBG;
-	for (size_t i = 0; i < 50; i++)
-	{
-		delete particleMan[i];
-	}
+	delete obj;
+	delete billboard;
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
@@ -42,33 +40,20 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	for (size_t i = 0; i < 50; i++)
-	{
-		particleMan[i] = ParticleManager::Create();
-		particleMan[i]->Initialize();
-		particleMan[i]->SetPosition({dist(engine), 0.0f, dist(engine)});
-		particleMan[i]->Update();
-	}
+
+	obj = ParticleManager::Create();
+	obj->Initialize();
+	obj->SetPosition({ 2,0,0 });
+	obj->Update();
+
+	billboard = ParticleManager::Create();
+	billboard->Initialize(true);
+	billboard->SetPosition({ -2,0,0 });
+	billboard->Update();
 }
 
 void GameScene::Update()
 {
-	//// オブジェクト移動
-	//if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-	//{
-	//	// 現在の座標を取得
-	//	XMFLOAT3 position = object3d->GetPosition();
-
-	//	// 移動後の座標を計算
-	//	if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-	//	else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-	//	if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-	//	else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
-
-	//	// 座標の変更を反映
-	//	object3d->SetPosition(position);
-	//}
-
 	// カメラ移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
 	{
@@ -78,10 +63,8 @@ void GameScene::Update()
 		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
 	}
 
-	for (size_t i = 0; i < 50; i++)
-	{
-		particleMan[i]->Update();
-	}
+	obj->Update();
+	billboard->Update();
 }
 
 void GameScene::Draw()
@@ -110,11 +93,8 @@ void GameScene::Draw()
 	ParticleManager::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	for (size_t i = 0; i < 50; i++)
-	{
-		particleMan[i]->Draw();
-	}
-
+	obj->Draw();
+	billboard->Draw();
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる

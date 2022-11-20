@@ -196,7 +196,7 @@ private:// 静的メンバ関数
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
-	bool Initialize();
+	bool Initialize(bool billboard = false);
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
@@ -233,5 +233,7 @@ private: // メンバ変数
 	XMMATRIX matWorld;
 	// 親オブジェクト
 	ParticleManager* parent = nullptr;
+
+	bool billboard = false;
 };
 

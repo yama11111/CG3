@@ -365,7 +365,7 @@ void ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	// WICテクスチャのロード
-	result = LoadFromWICFile( L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	result = LoadFromWICFile( L"Resources/obj.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	assert(SUCCEEDED(result));
 
 	ScratchImage mipChain{};
@@ -718,7 +718,7 @@ void ParticleManager::UpdateViewMatrix()
 #pragma endregion 
 }
 
-bool ParticleManager::Initialize()
+bool ParticleManager::Initialize(bool billboard)
 {
 	// nullptrチェック
 	assert(device);
@@ -737,6 +737,8 @@ bool ParticleManager::Initialize()
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuff));
 	assert(SUCCEEDED(result));
+
+	this->billboard = billboard;
 
 	return true;
 }
@@ -760,8 +762,8 @@ void ParticleManager::Update()
 	matWorld *= matScale; // ワールド行列にスケーリングを反映
 	matWorld *= matRot; // ワールド行列に回転を反映
 
-	matWorld *= matBillboard; // ビルボード行列を掛ける
-	matWorld *= matBillboardY; // Y軸ビルボード行列を掛ける
+	//matWorld *= matBillboard; // ビルボード行列を掛ける
+	//matWorld *= matBillboardY; // Y軸ビルボード行列を掛ける
 
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
@@ -775,9 +777,11 @@ void ParticleManager::Update()
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	//constMap->color = color;
-	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
-	constMap->mat = matView * matProjection;	// 行列の合成
-	constMap->matBillboard = matBillboard;
+	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	//onstMap->mat = matView * matProjection;	// 行列の合成
+	XMMATRIX m = XMMatrixIdentity();
+	if (billboard) { m = matBillboard; }
+	constMap->matBillboard = m;
 	constBuff->Unmap(0, nullptr);
 }
 
