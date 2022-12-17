@@ -19,10 +19,12 @@ void Model::StaticInitialize(ID3D12Device* device) {
 	Mesh::StaticInitialize(device);
 }
 
-Model* Model::CreateFromOBJ(const std::string& modelname) {
+//Model* Model::CreateFromOBJ(const std::string& modelname) {
+Model* Model::CreateFromOBJ(const std::string& modelname, bool smoothing) {
 	// メモリ確保
 	Model* instance = new Model;
-	instance->Initialize(modelname);
+	//instance->Initialize(modelname);
+	instance->Initialize(modelname, smoothing);
 
 	return instance;
 }
@@ -39,7 +41,7 @@ Model::~Model() {
 	materials.clear();
 }
 
-void Model::Initialize(const std::string& modelname) {
+void Model::Initialize(const std::string& modelname, bool smoothing) {
 	const string filename = modelname + ".obj";
 	const string directoryPath = baseDirectory + modelname + "/";
 

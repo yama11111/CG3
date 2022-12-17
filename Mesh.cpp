@@ -4,6 +4,8 @@
 
 #pragma comment(lib, "d3dcompiler.lib")
 
+using namespace DirectX;
+
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
@@ -93,4 +95,14 @@ void Mesh::Draw(ID3D12GraphicsCommandList* cmdList) {
 
 	// 描画コマンド
 	cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
+}
+
+void Mesh::AddSmoothData(unsigned short indexPosition, unsigned short indexVertex)
+{
+	smoothData[indexPosition].emplace_back(indexVertex);
+}
+
+void Mesh::CalculateSmoothedVertexNormals()
+{
+
 }
