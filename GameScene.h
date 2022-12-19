@@ -8,6 +8,8 @@
 #include "Sprite.h"
 #include <DirectXMath.h>
 
+#include "Light.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -70,4 +72,7 @@ class GameScene {
 	Object3d* objGround = nullptr;
 	Object3d* objFighter = nullptr;
 	Object3d* objSphere = nullptr;
+
+	Light* light = nullptr;
+
 };

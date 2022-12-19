@@ -104,5 +104,19 @@ void Mesh::AddSmoothData(unsigned short indexPosition, unsigned short indexVerte
 
 void Mesh::CalculateSmoothedVertexNormals()
 {
-
+	auto itr = smoothData.begin();
+	for (; itr != smoothData.end(); ++itr)
+	{
+		std::vector<unsigned short>& v = itr->second;
+		XMVECTOR normal = {};
+		for (unsigned short index : v)
+		{
+			normal += XMVectorSet(vertices[index].normal.x, vertices[index].normal.y, vertices[index].normal.z, 0);
+		}
+		normal = XMVector3Normalize(normal / (float)v.size());
+		for (unsigned short index : v)
+		{
+			vertices[index].normal = { normal.m128_f32[0], normal.m128_f32[1], normal.m128_f32[2] };
+		}
+	}
 }
